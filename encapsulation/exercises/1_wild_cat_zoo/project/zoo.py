@@ -58,7 +58,7 @@ class Zoo:
 
     def __print_status(self, collection_ls: list[Animal|Worker], *args: str):
         elements = {arg: [] for arg in args}  # {"LIon": []}
-        for item  in collection_ls:
+        for item in collection_ls:
             elements[item.__class__.__name__].append(repr(item))
 
         result = [f"You have {len(collection_ls)} {str(collection_ls[0].__class__.__bases__[0].__name__).lower()}s"]
