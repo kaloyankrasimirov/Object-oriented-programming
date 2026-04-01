@@ -3,7 +3,7 @@ from project.user import User
 
 class Library:
     def __init__(self):
-        self.user_records:list = []
+        self.user_records:list[User] = []
         self.books_available:dict = {}
         self.rented_books:dict = {}
 
@@ -17,13 +17,21 @@ class Library:
             self.rented_books[user.username][book_name] = days_to_return
             return f"{book_name} successfully rented for the next {days_to_return} days!"
 
-        for user_data in self.rented_books.values():
-            if book_name in user_data:
-                return f'The book "{book_name}" is already rented and will be available in {user_data[book_name]} days!'
-        return None
+        # for user_data in self.rented_books.values():
+        #     if book_name in user_data:
+        #         return f'The book "{book_name}" is already rented and will be available in {user_data[book_name]} days!'
+        # return None
+
+        result = next((user_rentals[book_name] for user_rentals in self.rented_books.values() if book_name in user_rentals), None)
+
+        if result:
+            return f'The book "{book_name}" is already rented and will be available in {result} days!'
+
 
     def return_book(self, author: str, book_name: str, user: User):
         if book_name in user.books:
-            pass
+            self.books_available[author].append(book_name)
+            self.rented_books[user.username].pop(book_name)
+            user.books.remove(book_name)
         else:
-            return f"{user} doesn't have this book in his/her records!"
+         return f"{user.username} doesn't have this book in his/her records!"
